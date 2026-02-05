@@ -107,20 +107,20 @@
                    </Select>
                  </div>
  
-                 <div className="flex gap-2">
-                  <Button size="sm" className="flex-1 bg-secondary hover:bg-secondary/90">
-                     <Filter className="h-4 w-4 mr-1" />
-                     Advanced Filters
-                   </Button>
-                   <Button
-                     size="sm"
-                     variant="outline"
-                     className="text-destructive border-destructive/30 hover:bg-destructive/10"
-                   >
-                     <X className="h-4 w-4 mr-1" />
-                     Clear All
-                   </Button>
-                 </div>
+                  <div className="flex flex-col gap-2">
+                    <Button size="sm" className="w-full bg-secondary hover:bg-secondary/90">
+                      <Filter className="h-4 w-4 mr-1" />
+                      Advanced Filters
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full text-destructive border-destructive/30 hover:bg-destructive/10"
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Clear All
+                    </Button>
+                  </div>
  
                  <div className="space-y-2">
                    <Label className="font-medium">Select Audio File</Label>
