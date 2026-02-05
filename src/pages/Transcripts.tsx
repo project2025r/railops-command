@@ -107,18 +107,18 @@
                    </Select>
                  </div>
  
-                  <div className="flex flex-col gap-2">
-                    <Button size="sm" className="w-full bg-secondary hover:bg-secondary/90">
-                      <Filter className="h-4 w-4 mr-1" />
-                      Advanced Filters
+                  <div className="flex gap-2">
+                    <Button size="sm" className="flex-1 min-w-0 bg-secondary hover:bg-secondary/90 text-xs px-2">
+                      <Filter className="h-3 w-3 mr-1 flex-shrink-0" />
+                      <span className="truncate">Filters</span>
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="w-full text-destructive border-destructive/30 hover:bg-destructive/10"
+                      className="flex-1 min-w-0 text-destructive border-destructive/30 hover:bg-destructive/10 text-xs px-2"
                     >
-                      <X className="h-4 w-4 mr-1" />
-                      Clear All
+                      <X className="h-3 w-3 mr-1 flex-shrink-0" />
+                      <span className="truncate">Clear</span>
                     </Button>
                   </div>
  
