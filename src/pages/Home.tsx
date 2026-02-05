@@ -2,19 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { FileText, LayoutDashboard, BarChart3, Upload, Music } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { ActionTile } from "@/components/ui/ActionTile";
-
-// Mock user role - in production this would come from auth context
-const useUserRole = () => {
-  // For demo: change this to "Division User" to see the Upload Audio tile
-  // Super Admin sees Upload Statistics, Division User sees Upload Audio
-  return { role: "Super Admin" as "Super Admin" | "Division User" };
-};
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { role } = useUserRole();
+  const { user, isAuthenticated } = useAuth();
 
-  const isSuperAdmin = role === "Super Admin";
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const isSuperAdmin = user?.role === "Super Admin";
 
   const baseModules = [
     {
@@ -68,6 +70,10 @@ export default function Home() {
       };
 
   const modules = [...baseModules, lastModule];
+
+  if (!isAuthenticated) {
+    return null; // Will redirect
+  }
 
   return (
     <AppShell>

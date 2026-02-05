@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Upload, RotateCcw, Loader2, CheckCircle } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { FileDropzone } from "@/components/upload/FileDropzone";
 import { UploadForm, UploadFormData, UploadFormErrors } from "@/components/upload/UploadForm";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const initialFormData: UploadFormData = {
   trainNumber: "",
@@ -23,6 +24,7 @@ const initialFormData: UploadFormData = {
 export default function UploadAudio() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
   
   const [formData, setFormData] = useState<UploadFormData>(initialFormData);
   const [files, setFiles] = useState<File[]>([]);
@@ -31,11 +33,12 @@ export default function UploadAudio() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadComplete, setUploadComplete] = useState(false);
 
-  // Mock user context - in production this would come from auth context
-  const userContext = {
-    username: "Ajuser1",
-    division: "Ajmer",
-  };
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: UploadFormErrors = {};
@@ -130,6 +133,10 @@ export default function UploadAudio() {
     }, 3000);
   }, [files, validateForm, toast]);
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <AppShell>
       <PageHeader
@@ -138,8 +145,11 @@ export default function UploadAudio() {
       />
 
       <div className="container py-8 space-y-6">
-        {/* Context Bar */}
-        <ContextBar username={userContext.username} division={userContext.division} />
+        {/* Context Bar - uses logged in user info */}
+        <ContextBar 
+          username={user?.username || "Unknown"} 
+          division={user?.division || "Unknown"} 
+        />
 
         {/* Upload Form Card */}
         <div className="card-elevated p-6 space-y-6">
