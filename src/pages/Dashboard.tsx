@@ -1,81 +1,109 @@
- import { useState } from "react";
- import { AppShell } from "@/components/layout/AppShell";
- import { PageHeader } from "@/components/ui/PageHeader";
- import { ChartCard } from "@/components/ui/ChartCard";
- import { Button } from "@/components/ui/button";
- import { Label } from "@/components/ui/label";
- import {
-   Select,
-   SelectContent,
-   SelectItem,
-   SelectTrigger,
-   SelectValue,
- } from "@/components/ui/select";
- import {
-   Shield,
-   BarChart3,
-   MapPin,
-   Lightbulb,
-   FileText,
-   AlertTriangle,
-   Filter,
- } from "lucide-react";
- 
- const divisions = ["All Divisions", "Jodhpur", "Jaipur", "Bikaner", "Ajmer"];
- const lps = ["All LPs", "Ram Sumer Yadav", "Virendra Singh Tanwar", "Naval Kishor Meena"];
- const trains = ["All Trains", "ECR", "12345", "14853"];
- const sections = ["All Sections", "JU-MJ", "JU-BKN", "JP-AII"];
- const lobbies = ["All HQs", "JU", "JP", "BKN", "AII"];
- 
- export default function Dashboard() {
-   const [filters, setFilters] = useState({
-     division: "",
-     date: "",
-     lp: "",
-     trainNumber: "",
-     section: "",
-     lobby: "",
-   });
-   const [dataLoaded, setDataLoaded] = useState(false);
- 
-   const handleApplyFilters = () => {
-     setDataLoaded(true);
-   };
- 
-   return (
-     <AppShell>
-       <PageHeader
-         title="Railway Operations Dashboard"
-         description="Real-time analytics and performance metrics"
-       />
- 
-       <div className="container py-8">
-         <div className="flex flex-col lg:flex-row gap-8">
-           {/* Sidebar Filters */}
-           <aside className="lg:w-64 flex-shrink-0">
-             <div className="card-elevated p-5 sticky top-24 space-y-5">
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppShell } from "@/components/layout/AppShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { ChartCard } from "@/components/ui/ChartCard";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Shield,
+  BarChart3,
+  MapPin,
+  Lightbulb,
+  FileText,
+  AlertTriangle,
+  Filter,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+
+const divisions = ["All Divisions", "Jodhpur", "Jaipur", "Bikaner", "Ajmer"];
+const lps = ["All LPs", "Ram Sumer Yadav", "Virendra Singh Tanwar", "Naval Kishor Meena"];
+const trains = ["All Trains", "ECR", "12345", "14853"];
+const sections = ["All Sections", "JU-MJ", "JU-BKN", "JP-AII"];
+const lobbies = ["All HQs", "JU", "JP", "BKN", "AII"];
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  
+  const isSuperAdmin = user?.role === "Super Admin";
+
+  const [filters, setFilters] = useState({
+    division: "",
+    date: "",
+    lp: "",
+    trainNumber: "",
+    section: "",
+    lobby: "",
+  });
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Set division filter to user's division for non-Super Admin users
+  useEffect(() => {
+    if (user && !isSuperAdmin && user.division) {
+      setFilters((prev) => ({ ...prev, division: user.division }));
+    }
+  }, [user, isSuperAdmin]);
+
+  const handleApplyFilters = () => {
+    setDataLoaded(true);
+  };
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <AppShell>
+      <PageHeader
+        title="Railway Operations Dashboard"
+        description="Real-time analytics and performance metrics"
+      />
+
+      <div className="container py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar Filters */}
+          <aside className="lg:w-64 flex-shrink-0">
+            <div className="card-elevated p-5 sticky top-24 space-y-5">
               <h3 className="font-semibold text-secondary flex items-center gap-2">
-                 <Filter className="h-4 w-4" />
-                 Filters
-               </h3>
- 
-               <div className="space-y-4">
-                 <div className="space-y-2">
-                  <Label className="text-secondary font-medium">Division</Label>
-                   <Select
-                     value={filters.division}
-                     onValueChange={(v) => setFilters({ ...filters, division: v })}
-                   >
-                     <SelectTrigger className="input-premium">
-                       <SelectValue placeholder="All Divisions" />
-                     </SelectTrigger>
-                     <SelectContent>
-                       {divisions.map((d) => (
-                         <SelectItem key={d} value={d}>{d}</SelectItem>
-                       ))}
-                     </SelectContent>
-                   </Select>
-                 </div>
+                <Filter className="h-4 w-4" />
+                Filters
+              </h3>
+
+              <div className="space-y-4">
+                {/* Division filter - only show for Super Admin */}
+                {isSuperAdmin && (
+                  <div className="space-y-2">
+                    <Label className="text-secondary font-medium">Division</Label>
+                    <Select
+                      value={filters.division}
+                      onValueChange={(v) => setFilters({ ...filters, division: v })}
+                    >
+                      <SelectTrigger className="input-premium">
+                        <SelectValue placeholder="All Divisions" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {divisions.map((d) => (
+                          <SelectItem key={d} value={d}>{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
  
                  <div className="space-y-2">
                   <Label className="text-secondary font-medium">Select Date</Label>
