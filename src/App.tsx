@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Transcripts from "./pages/Transcripts";
 import Reports from "./pages/Reports";
 import UploadStatistics from "./pages/UploadStatistics";
+import UploadAudio from "./pages/UploadAudio";
 import CreateDivision from "./pages/admin/CreateDivision";
 import CreateUser from "./pages/admin/CreateUser";
 import ManageUsers from "./pages/admin/ManageUsers";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/transcripts" element={<Transcripts />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/upload-statistics" element={<UploadStatistics />} />
+          <Route path="/upload-audio" element={<UploadAudio />} />
           <Route path="/admin/create-division" element={<CreateDivision />} />
           <Route path="/admin/create-user" element={<CreateUser />} />
           <Route path="/admin/manage-users" element={<ManageUsers />} />

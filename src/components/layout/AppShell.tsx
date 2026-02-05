@@ -1,5 +1,4 @@
- import { useState } from "react";
- import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
  import {
    Home,
    LayoutDashboard,
@@ -34,14 +33,22 @@
    { name: "Upload Statistics", href: "/upload-statistics", icon: Upload },
  ];
  
- export function AppShell({ children }: AppShellProps) {
-   const location = useLocation();
-   const navigate = useNavigate();
-   const [user] = useState({ username: "admin", role: "Super Admin" });
- 
-   const handleLogout = () => {
-     navigate("/");
-   };
+// Mock hook for user role - in production this would come from auth context
+const useUserRole = () => {
+  // Change this to "Division User" to test non-admin view
+  return { role: "Super Admin" as "Super Admin" | "Admin" | "Division User", username: "admin", division: "Ajmer" };
+};
+
+export function AppShell({ children }: AppShellProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const userInfo = useUserRole();
+  
+  const isAdmin = userInfo.role === "Super Admin" || userInfo.role === "Admin";
+
+  const handleLogout = () => {
+    navigate("/");
+  };
  
    return (
      <div className="min-h-screen bg-background">
@@ -86,43 +93,45 @@
              </nav>
            </div>
  
-           {/* Right Side */}
-           <div className="flex items-center gap-4">
-             {/* User Info */}
-             <div className="hidden sm:flex items-center gap-3">
-               <span className="text-header-foreground/80 text-sm">
-                 Welcome, {user.username}
-               </span>
-               <RoleBadge role={user.role as "Admin" | "Super Admin"} />
-             </div>
- 
-             {/* Admin Menu */}
-             <DropdownMenu>
-               <DropdownMenuTrigger asChild>
-                 <Button
-                   variant="ghost"
-                   className="text-header-foreground/80 hover:text-header-foreground hover:bg-white/10"
-                 >
-                   <Settings className="h-4 w-4 mr-2" />
-                   Admin
-                   <ChevronDown className="h-4 w-4 ml-1" />
-                 </Button>
-               </DropdownMenuTrigger>
-               <DropdownMenuContent align="end" className="w-48 animate-fade-in">
-                 <DropdownMenuItem onClick={() => navigate("/admin/create-division")}>
-                   <Building2 className="h-4 w-4 mr-2" />
-                   Create Division
-                 </DropdownMenuItem>
-                 <DropdownMenuItem onClick={() => navigate("/admin/create-user")}>
-                   <UserPlus className="h-4 w-4 mr-2" />
-                   Create User
-                 </DropdownMenuItem>
-                 <DropdownMenuItem onClick={() => navigate("/admin/manage-users")}>
-                   <Users className="h-4 w-4 mr-2" />
-                   Manage Users
-                 </DropdownMenuItem>
-               </DropdownMenuContent>
-             </DropdownMenu>
+          {/* Right Side */}
+          <div className="flex items-center gap-4">
+            {/* User Info */}
+            <div className="hidden sm:flex items-center gap-3">
+              <span className="text-header-foreground/80 text-sm">
+                Welcome, {userInfo.username}
+              </span>
+              <RoleBadge role={userInfo.role as "Admin" | "Super Admin"} />
+            </div>
+
+            {/* Admin Menu - only visible for Admin/Super Admin */}
+            {isAdmin && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-header-foreground/80 hover:text-header-foreground hover:bg-white/10"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Admin
+                    <ChevronDown className="h-4 w-4 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 animate-fade-in">
+                  <DropdownMenuItem onClick={() => navigate("/admin/create-division")}>
+                    <Building2 className="h-4 w-4 mr-2" />
+                    Create Division
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/admin/create-user")}>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Create User
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/admin/manage-users")}>
+                    <Users className="h-4 w-4 mr-2" />
+                    Manage Users
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
  
              {/* Logout */}
              <Button
