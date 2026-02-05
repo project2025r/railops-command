@@ -43,7 +43,7 @@
          <div className="bg-card rounded-2xl shadow-elevated-lg p-8 border border-border/50">
            {/* Header */}
            <div className="text-center mb-8">
-             <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-brand-gradient mb-2">
                North Western Railway
              </h1>
              <p className="text-muted-foreground">Railcomm analytics platform</p>
@@ -61,7 +61,7 @@
              {/* Username */}
              <div className="space-y-2">
                <Label htmlFor="username" className="flex items-center gap-2">
-                 <User className="h-4 w-4 text-muted-foreground" />
+                <User className="h-4 w-4 text-secondary" />
                  Username
                </Label>
                <Input
@@ -78,7 +78,7 @@
              {/* Division */}
              <div className="space-y-2">
                <Label htmlFor="division" className="flex items-center gap-2">
-                 <Building2 className="h-4 w-4 text-muted-foreground" />
+                <Building2 className="h-4 w-4 text-secondary" />
                  Division
                </Label>
                <Select
@@ -99,7 +99,7 @@
                  </SelectContent>
                </Select>
                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                 <Lightbulb className="h-3 w-3 text-warning" />
+                <Lightbulb className="h-3 w-3 text-primary" />
                  Super Admin users can leave division empty to access all divisions
                </p>
              </div>
@@ -107,7 +107,7 @@
              {/* Password */}
              <div className="space-y-2">
                <Label htmlFor="password" className="flex items-center gap-2">
-                 <Lock className="h-4 w-4 text-muted-foreground" />
+                <Lock className="h-4 w-4 text-secondary" />
                  Password
                </Label>
                <div className="relative">
@@ -136,7 +136,7 @@
              </div>
  
              {/* Submit */}
-             <Button type="submit" className="w-full h-11 text-base font-medium">
+            <Button type="submit" className="w-full h-11 text-base font-medium bg-secondary hover:bg-secondary/90">
                Sign In
              </Button>
            </form>

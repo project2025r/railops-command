@@ -22,10 +22,10 @@
    className,
  }: ActionTileProps) {
    const iconVariants = {
-     blue: "bg-primary text-primary-foreground",
-     indigo: "bg-[hsl(243_75%_59%)] text-white",
-     purple: "bg-[hsl(280_65%_50%)] text-white",
-     orange: "bg-warning text-warning-foreground",
+    blue: "bg-secondary text-secondary-foreground",
+    indigo: "bg-brand-blue text-white",
+    purple: "bg-brand-purple text-white",
+    orange: "bg-primary text-primary-foreground",
    };
  
    return (
@@ -45,7 +45,7 @@
        </div>
        <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
        <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{description}</p>
-       <Button onClick={onAction} className="w-full max-w-[200px]">
+      <Button onClick={onAction} className="w-full max-w-[200px] bg-secondary hover:bg-secondary/90">
          {actionLabel}
        </Button>
      </div>

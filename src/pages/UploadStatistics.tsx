@@ -84,7 +84,7 @@
                <X className="h-4 w-4 mr-1" />
                Clear
              </Button>
-             <Button>
+            <Button className="bg-secondary hover:bg-secondary/90">
                <RefreshCw className="h-4 w-4 mr-2" />
                Refresh
              </Button>
@@ -117,7 +117,7 @@
  
          {/* Division Statistics Table */}
          <div className="space-y-4">
-           <h3 className="text-lg font-semibold text-foreground">Division Statistics</h3>
+          <h3 className="text-lg font-semibold text-secondary">Division Statistics</h3>
            <DataTable columns={columns} data={divisionData} />
            <p className="text-center text-sm text-muted-foreground">
              Real-time tracking (All Divisions)

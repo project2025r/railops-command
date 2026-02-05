@@ -14,7 +14,7 @@
        icon: FileText,
        actionLabel: "View Transcripts",
        href: "/transcripts",
-       variant: "blue" as const,
+      variant: "orange" as const,
      },
      {
        title: "Dashboard",
@@ -23,7 +23,7 @@
        icon: LayoutDashboard,
        actionLabel: "View Dashboard",
        href: "/dashboard",
-       variant: "indigo" as const,
+      variant: "blue" as const,
      },
      {
        title: "Reports",
@@ -41,7 +41,7 @@
        icon: Upload,
        actionLabel: "View Statistics",
        href: "/upload-statistics",
-       variant: "orange" as const,
+      variant: "blue" as const,
      },
    ];
  
@@ -49,7 +49,7 @@
      <AppShell>
        {/* Hero Section */}
        <div className="text-center py-12 px-6">
-         <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-brand-gradient mb-3">
            AiSPRY - North Western Railways
          </h1>
          <p className="text-muted-foreground text-lg">

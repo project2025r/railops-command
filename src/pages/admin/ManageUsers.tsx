@@ -128,7 +128,7 @@
                  <div className="flex gap-2">
                    <Button
                      size="icon"
-                     className="bg-primary hover:bg-primary/90"
+                    className="bg-secondary hover:bg-secondary/90"
                      onClick={() => navigate(`/admin/edit-user/${user.id}`)}
                    >
                      <Pencil className="h-4 w-4" />

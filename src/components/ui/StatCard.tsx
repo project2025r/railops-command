@@ -20,9 +20,9 @@
  }: StatCardProps) {
    const variantStyles = {
      default: "bg-card",
-     primary: "bg-primary/5 border-primary/20",
-     success: "bg-success/5 border-success/20",
-     warning: "bg-warning/5 border-warning/20",
+    primary: "bg-secondary/5 border-secondary/20",
+    success: "bg-accent/5 border-accent/20",
+    warning: "bg-primary/5 border-primary/20",
    };
  
    return (
@@ -42,8 +42,8 @@
            )}
          </div>
          {Icon && (
-           <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-             <Icon className="h-5 w-5 text-primary" />
+          <div className="h-10 w-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+            <Icon className="h-5 w-5 text-secondary" />
            </div>
          )}
        </div>

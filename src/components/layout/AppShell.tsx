@@ -51,8 +51,8 @@
            {/* Logo */}
            <div className="flex items-center gap-8">
              <Link to="/home" className="flex items-center gap-3">
-               <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-                 <span className="text-primary-foreground font-bold text-lg">A</span>
+              <div className="h-9 w-9 rounded-lg bg-white flex items-center justify-center">
+                <span className="text-brand-orange font-bold text-lg">A</span>
                </div>
                <div className="hidden sm:block">
                  <h1 className="text-header-foreground font-semibold text-lg leading-tight">
@@ -128,7 +128,7 @@
              <Button
                variant="ghost"
                onClick={handleLogout}
-               className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="text-white hover:text-white hover:bg-white/10 border border-white/30"
              >
                <LogOut className="h-4 w-4 mr-2" />
                Logout

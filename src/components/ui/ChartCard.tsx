@@ -32,7 +32,7 @@
          <div className="flex items-start justify-between">
            <div>
              <h3 className="font-semibold text-foreground flex items-center gap-2">
-               {Icon && <Icon className="h-4 w-4 text-primary" />}
+              {Icon && <Icon className="h-4 w-4 text-secondary" />}
                {title}
              </h3>
              {description && (
@@ -50,7 +50,7 @@
              description={emptyMessage || `Click "${emptyAction?.label}" to view data`}
              action={
                emptyAction && (
-                 <Button size="sm" onClick={emptyAction.onClick}>
+                <Button size="sm" onClick={emptyAction.onClick} className="bg-secondary hover:bg-secondary/90">
                    {emptyAction.label}
                  </Button>
                )

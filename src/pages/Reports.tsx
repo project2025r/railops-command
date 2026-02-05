@@ -101,7 +101,7 @@
      header: "Actions",
      className: "text-right",
      render: () => (
-       <Button size="sm" className="bg-success hover:bg-success/90">
+      <Button size="sm" className="bg-accent hover:bg-accent/90">
          <Download className="h-4 w-4 mr-1" />
          Download
        </Button>
@@ -191,7 +191,7 @@
          {/* Results Table */}
          <div className="space-y-4">
            <div className="flex items-center justify-between">
-             <h3 className="text-lg font-semibold text-foreground">LP Reports Summary</h3>
+            <h3 className="text-lg font-semibold text-secondary">LP Reports Summary</h3>
              <span className="text-sm text-muted-foreground">
                Showing {sampleData.length} of {sampleData.length} results
              </span>
