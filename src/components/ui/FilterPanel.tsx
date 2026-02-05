@@ -29,7 +29,7 @@
          {children}
        </div>
        <div className="flex items-center justify-end gap-3">
-         <Button onClick={onApply}>
+        <Button onClick={onApply} className="bg-secondary hover:bg-secondary/90">
            <Filter className="h-4 w-4 mr-2" />
            Apply Filters
          </Button>

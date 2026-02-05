@@ -50,7 +50,7 @@
  
          <div className="card-elevated p-6">
            <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-             <Building2 className="h-5 w-5 text-primary" />
+            <Building2 className="h-5 w-5 text-secondary" />
              Create New Division
            </h2>
  
@@ -83,7 +83,7 @@
                />
              </div>
  
-             <Button type="submit" className="w-full bg-success hover:bg-success/90">
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">
                <Building2 className="h-4 w-4 mr-2" />
                Create Division
              </Button>

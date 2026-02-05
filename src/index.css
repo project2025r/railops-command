@@ -2,124 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-/* AiSPRY Railway Operations Platform - Premium Modern Design System */
+/* AiSPRY Railway Operations Platform - Brand Design System */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    /* Core surfaces */
-    --background: 220 20% 97%;
-    --foreground: 222 47% 11%;
+    /* Core surfaces - Light Gray BG */
+    --background: 210 17% 98%;
+    --foreground: 0 0% 27%;
 
     /* Cards with elevation */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 0 0% 27%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 0 0% 27%;
 
-    /* Primary - Deep Indigo */
-    --primary: 226 71% 40%;
+    /* Primary - AiSPRY Orange */
+    --primary: 27 80% 56%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    /* Secondary - AiSPRY Blue */
+    --secondary: 199 71% 44%;
+    --secondary-foreground: 0 0% 100%;
 
     /* Muted */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
 
-    /* Accent */
-    --accent: 226 71% 95%;
-    --accent-foreground: 226 71% 40%;
+    /* Accent - Teal */
+    --accent: 168 100% 36%;
+    --accent-foreground: 0 0% 100%;
 
     /* Semantic colors */
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 6 78% 57%;
     --destructive-foreground: 0 0% 100%;
     
-    --success: 142 76% 36%;
+    --success: 168 100% 36%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 27 80% 56%;
+    --warning-foreground: 0 0% 27%;
+    
+    /* Info - Light Blue */
+    --info: 214 100% 73%;
+    --info-foreground: 0 0% 27%;
 
     /* UI Elements */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 226 71% 40%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 27 80% 56%;
 
     --radius: 0.75rem;
 
-    /* Header - Dark premium */
-    --header: 222 47% 11%;
+    /* Header - Dark Footer color */
+    --header: 240 27% 14%;
     --header-foreground: 0 0% 100%;
     
     /* Chart colors */
-    --chart-1: 226 71% 40%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 0 84% 60%;
+    --chart-1: 27 80% 56%;
+    --chart-2: 199 71% 44%;
+    --chart-3: 168 100% 36%;
+    --chart-4: 282 39% 53%;
+    --chart-5: 12 72% 61%;
     
     /* Sidebar */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 226 71% 50%;
+    --sidebar-background: 240 27% 14%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 27 80% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 18%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 222 47% 18%;
-    --sidebar-ring: 226 71% 50%;
+    --sidebar-accent: 240 27% 20%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 240 27% 20%;
+    --sidebar-ring: 27 80% 56%;
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 220 14% 96%;
+    --background: 240 27% 10%;
+    --foreground: 0 0% 96%;
 
-    --card: 222 47% 11%;
-    --card-foreground: 220 14% 96%;
+    --card: 240 27% 14%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 220 14% 96%;
+    --popover: 240 27% 14%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 226 71% 50%;
+    --primary: 27 80% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 47% 18%;
-    --secondary-foreground: 220 14% 96%;
+    --secondary: 199 71% 44%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 222 47% 18%;
-    --muted-foreground: 220 9% 64%;
+    --muted: 240 27% 20%;
+    --muted-foreground: 0 0% 64%;
 
-    --accent: 222 47% 18%;
-    --accent-foreground: 226 71% 70%;
+    --accent: 168 100% 36%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 50%;
+    --destructive: 6 78% 57%;
     --destructive-foreground: 0 0% 100%;
     
-    --success: 142 76% 42%;
+    --success: 168 100% 42%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 38 92% 55%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 27 80% 60%;
+    --warning-foreground: 0 0% 27%;
 
-    --border: 222 47% 18%;
-    --input: 222 47% 18%;
-    --ring: 226 71% 50%;
+    --border: 240 27% 20%;
+    --input: 240 27% 20%;
+    --ring: 27 80% 56%;
     
-    --header: 222 47% 6%;
-    --header-foreground: 220 14% 96%;
+    --header: 240 27% 10%;
+    --header-foreground: 0 0% 96%;
     
-    --sidebar-background: 222 47% 6%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 226 71% 50%;
+    --sidebar-background: 240 27% 10%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 27 80% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 14%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 222 47% 14%;
-    --sidebar-ring: 226 71% 50%;
+    --sidebar-accent: 240 27% 14%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 240 27% 14%;
+    --sidebar-ring: 27 80% 56%;
   }
 }
 
@@ -149,14 +153,14 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
   }
   
-  /* Header gradient */
+  /* Header gradient - AiSPRY Brand Gradient */
   .header-gradient {
-    background: linear-gradient(135deg, hsl(var(--header)) 0%, hsl(222 47% 18%) 100%);
+    background: linear-gradient(90deg, #E98632 0%, #C2945A 35%, #6C8C87 70%, #228DBE 100%);
   }
   
-  /* Page header with subtle gradient */
+  /* Page header with brand gradient */
   .page-header-gradient {
-    background: linear-gradient(180deg, hsl(226 71% 40%) 0%, hsl(226 71% 35%) 100%);
+    background: linear-gradient(90deg, #E98632 0%, #C2945A 35%, #6C8C87 70%, #228DBE 100%);
   }
   
   /* Filter panel */
@@ -179,11 +183,16 @@
   }
   
   .badge-admin {
-    @apply bg-primary/10 text-primary border border-primary/20;
+    @apply bg-secondary/10 text-secondary border border-secondary/20;
   }
   
   .badge-super-admin {
     @apply bg-success/10 text-success border border-success/20;
+  }
+  
+  /* Brand accent badge */
+  .badge-brand {
+    @apply bg-primary/10 text-primary border border-primary/20;
   }
   
   /* Table styles */
@@ -201,7 +210,7 @@
   
   /* Input focus states */
   .input-premium {
-    @apply border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+    @apply border-border/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all;
   }
   
   /* Micro-animations */
@@ -230,5 +239,13 @@
   @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Brand text gradient */
+  .text-brand-gradient {
+    background: linear-gradient(90deg, #E98632 0%, #228DBE 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

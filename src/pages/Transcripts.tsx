@@ -63,7 +63,7 @@
      header: "Actions",
      className: "w-20 text-right",
      render: () => (
-       <Button variant="ghost" size="icon" className="h-8 w-8 text-warning hover:text-warning">
+      <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:text-primary">
          <Pencil className="h-4 w-4" />
        </Button>
      ),
@@ -86,10 +86,10 @@
            <aside className="lg:w-72 flex-shrink-0 space-y-6">
              <div className="card-elevated p-5">
                <div className="flex items-center gap-3 mb-5">
-                 <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
-                   <span className="text-primary-foreground font-bold">A</span>
+                <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center">
+                  <span className="text-secondary-foreground font-bold">A</span>
                  </div>
-                 <h3 className="text-lg font-semibold text-primary">Audio Analysis</h3>
+                <h3 className="text-lg font-semibold text-secondary">Audio Analysis</h3>
                </div>
  
                <div className="space-y-4">
@@ -108,7 +108,7 @@
                  </div>
  
                  <div className="flex gap-2">
-                   <Button size="sm" className="flex-1">
+                  <Button size="sm" className="flex-1 bg-secondary hover:bg-secondary/90">
                      <Filter className="h-4 w-4 mr-1" />
                      Advanced Filters
                    </Button>
@@ -139,7 +139,7 @@
                    </Select>
                  </div>
  
-                 <Button onClick={() => setShowTranscript(true)} className="w-full">
+                <Button onClick={() => setShowTranscript(true)} className="w-full bg-secondary hover:bg-secondary/90">
                    Show Transcript
                  </Button>
  
@@ -149,10 +149,10 @@
                      {["all", "relevant", "irrelevant"].map((opt) => (
                        <Button
                          key={opt}
-                         size="sm"
-                         variant={filterOption === opt ? "default" : "outline"}
+                        size="sm" 
+                        variant={filterOption === opt ? "default" : "outline"} 
                          onClick={() => setFilterOption(opt)}
-                         className="capitalize"
+                        className={`capitalize ${filterOption === opt ? "bg-secondary hover:bg-secondary/90" : ""}`}
                        >
                          {opt === "all" ? "Show All" : opt}
                        </Button>
@@ -172,12 +172,12 @@
                  Click to play audio
                </div>
                <div className="flex items-center gap-4">
-                 <Button variant="ghost" size="icon" className="h-10 w-10">
+                <Button variant="ghost" size="icon" className="h-10 w-10 hover:bg-secondary/10">
                    <Play className="h-5 w-5" />
                  </Button>
                  <span className="text-sm text-muted-foreground">0:00 / 20:00</span>
                  <div className="flex-1 h-1 bg-muted rounded-full">
-                   <div className="h-full w-0 bg-primary rounded-full" />
+                  <div className="h-full w-0 bg-secondary rounded-full" />
                  </div>
                  <Button variant="ghost" size="icon" className="h-8 w-8">
                    <Volume2 className="h-4 w-4" />

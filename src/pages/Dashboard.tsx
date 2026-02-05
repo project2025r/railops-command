@@ -54,14 +54,14 @@
            {/* Sidebar Filters */}
            <aside className="lg:w-64 flex-shrink-0">
              <div className="card-elevated p-5 sticky top-24 space-y-5">
-               <h3 className="font-semibold text-foreground flex items-center gap-2">
+              <h3 className="font-semibold text-secondary flex items-center gap-2">
                  <Filter className="h-4 w-4" />
                  Filters
                </h3>
  
                <div className="space-y-4">
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">Division</Label>
+                  <Label className="text-secondary font-medium">Division</Label>
                    <Select
                      value={filters.division}
                      onValueChange={(v) => setFilters({ ...filters, division: v })}
@@ -78,7 +78,7 @@
                  </div>
  
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">Select Date</Label>
+                  <Label className="text-secondary font-medium">Select Date</Label>
                    <Select
                      value={filters.date}
                      onValueChange={(v) => setFilters({ ...filters, date: v })}
@@ -95,7 +95,7 @@
                  </div>
  
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">LP</Label>
+                  <Label className="text-secondary font-medium">LP</Label>
                    <Select
                      value={filters.lp}
                      onValueChange={(v) => setFilters({ ...filters, lp: v })}
@@ -112,7 +112,7 @@
                  </div>
  
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">Train Number</Label>
+                  <Label className="text-secondary font-medium">Train Number</Label>
                    <Select
                      value={filters.trainNumber}
                      onValueChange={(v) => setFilters({ ...filters, trainNumber: v })}
@@ -129,7 +129,7 @@
                  </div>
  
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">Section</Label>
+                  <Label className="text-secondary font-medium">Section</Label>
                    <Select
                      value={filters.section}
                      onValueChange={(v) => setFilters({ ...filters, section: v })}
@@ -146,7 +146,7 @@
                  </div>
  
                  <div className="space-y-2">
-                   <Label className="text-primary font-medium">Lobby</Label>
+                  <Label className="text-secondary font-medium">Lobby</Label>
                    <Select
                      value={filters.lobby}
                      onValueChange={(v) => setFilters({ ...filters, lobby: v })}
@@ -163,7 +163,7 @@
                  </div>
                </div>
  
-               <Button onClick={handleApplyFilters} className="w-full">
+              <Button onClick={handleApplyFilters} className="w-full bg-accent hover:bg-accent/90">
                  Apply Filters
                </Button>
              </div>

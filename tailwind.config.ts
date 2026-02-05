@@ -58,6 +58,10 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         header: {
           DEFAULT: "hsl(var(--header))",
           foreground: "hsl(var(--header-foreground))",
@@ -78,6 +82,14 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
+        },
+        // AiSPRY Brand Colors (direct hex for specific use)
+        brand: {
+          orange: "#E98632",
+          blue: "#228DBE",
+          teal: "#00b894",
+          coral: "#e17055",
+          purple: "#9b59b6",
         },
       },
       borderRadius: {

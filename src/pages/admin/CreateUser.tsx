@@ -78,7 +78,7 @@
  
          <div className="card-elevated p-6">
            <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-             <UserPlus className="h-5 w-5 text-primary" />
+            <UserPlus className="h-5 w-5 text-secondary" />
              Create New User
            </h2>
  
@@ -118,7 +118,7 @@
                  </SelectContent>
                </Select>
                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                 <Info className="h-3 w-3 text-primary" />
+                <Info className="h-3 w-3 text-secondary" />
                  Select the division where this user will be assigned.
                </p>
              </div>
@@ -173,7 +173,7 @@
                </div>
              </div>
  
-             <Button type="submit" className="w-full bg-success hover:bg-success/90">
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">
                <UserPlus className="h-4 w-4 mr-2" />
                Create User
              </Button>
