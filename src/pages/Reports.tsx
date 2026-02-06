@@ -101,7 +101,7 @@
      header: "Actions",
      className: "text-right",
      render: () => (
-      <Button size="sm" className="bg-accent hover:bg-accent/90">
+      <Button size="sm" className="bg-secondary hover:bg-secondary/90">
          <Download className="h-4 w-4 mr-1" />
          Download
        </Button>
