@@ -191,7 +191,7 @@ export default function Dashboard() {
                  </div>
                </div>
  
-              <Button onClick={handleApplyFilters} className="w-full bg-accent hover:bg-accent/90">
+              <Button onClick={handleApplyFilters} className="w-full bg-secondary hover:bg-secondary/90">
                  Apply Filters
                </Button>
              </div>
