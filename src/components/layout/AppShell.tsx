@@ -156,7 +156,7 @@ export function AppShell({ children }: AppShellProps) {
       {/* Footer */}
       <footer className="border-t border-border/50 py-4 mt-8">
         <div className="container text-center text-sm text-muted-foreground">
-          © 2025 AiSPRY. All rights reserved. Powered by{" "}
+          © AiSPRY. All rights reserved. Powered by{" "}
           <span className="font-semibold">AiSPRY</span>.
         </div>
       </footer>
