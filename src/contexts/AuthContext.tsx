@@ -1,40 +1,62 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  type ReactNode,
+} from 'react';
+import { authService } from '@/services/api';
+import type { UserInfo } from '@/types/api.types';
 
-export type UserRole = "Super Admin" | "Admin" | "Division User";
+export type UserRole = 'Super Admin' | 'Admin' | 'Division User';
 
 export interface AuthUser {
+  id: number;
   username: string;
   role: UserRole;
   division: string;
+  is_admin: boolean;
+  is_super_admin: boolean;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string, division?: string) => { success: boolean; error?: string };
-  logout: () => void;
+  isLoading: boolean;
+  login: (
+    username: string,
+    password: string,
+    division?: string,
+  ) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock credentials database
-const MOCK_USERS: Record<string, { password: string; role: UserRole; division: string }> = {
-  admin: {
-    password: "admin",
-    role: "Super Admin",
-    division: "", // Super Admin has access to all divisions
-  },
-  Ajuser1: {
-    password: "123",
-    role: "Division User",
-    division: "Ajmer",
-  },
-};
+/** Map API user info to our AuthUser shape. */
+function mapUserInfo(info: UserInfo): AuthUser {
+  let role: UserRole = 'Division User';
+  if (info.is_super_admin) {
+    role = 'Super Admin';
+  } else if (info.is_admin) {
+    role = 'Admin';
+  }
+
+  return {
+    id: info.id,
+    username: info.username,
+    role,
+    division: info.division ?? '',
+    is_admin: info.is_admin,
+    is_super_admin: info.is_super_admin,
+  };
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
-    // Check for existing session in localStorage
-    const stored = localStorage.getItem("auth_user");
+    // Restore cached user from localStorage for instant render
+    const stored = localStorage.getItem('auth_user');
     if (stored) {
       try {
         return JSON.parse(stored);
@@ -44,42 +66,84 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     return null;
   });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = useCallback((username: string, password: string, division?: string) => {
-    const mockUser = MOCK_USERS[username];
+  // ── Session restore: verify with backend on mount ──────────────────────────
+  useEffect(() => {
+    let cancelled = false;
 
-    if (!mockUser) {
-      return { success: false, error: "User not found" };
+    async function verifySession() {
+      try {
+        const info = await authService.getCurrentUser();
+        if (!cancelled) {
+          const authUser = mapUserInfo(info);
+          setUser(authUser);
+          localStorage.setItem('auth_user', JSON.stringify(authUser));
+        }
+      } catch {
+        // Session expired or invalid — clear local state
+        if (!cancelled) {
+          setUser(null);
+          localStorage.removeItem('auth_user');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
     }
 
-    if (mockUser.password !== password) {
-      return { success: false, error: "Invalid password" };
-    }
-
-    // For division users, verify division matches
-    if (mockUser.role === "Division User" && division && division !== mockUser.division) {
-      return { success: false, error: `User ${username} is not assigned to ${division} division` };
-    }
-
-    const authUser: AuthUser = {
-      username,
-      role: mockUser.role,
-      division: mockUser.division || division || "",
+    verifySession();
+    return () => {
+      cancelled = true;
     };
-
-    setUser(authUser);
-    localStorage.setItem("auth_user", JSON.stringify(authUser));
-    
-    return { success: true };
   }, []);
 
-  const logout = useCallback(() => {
+  // ── Login ──────────────────────────────────────────────────────────────────
+  const login = useCallback(
+    async (
+      username: string,
+      password: string,
+      division?: string,
+    ): Promise<{ success: boolean; error?: string }> => {
+      try {
+        await authService.login({
+          username,
+          password,
+          division: division || undefined,
+        });
+
+        // Fetch full user info after successful login
+        const info = await authService.getCurrentUser();
+        const authUser = mapUserInfo(info);
+        setUser(authUser);
+        localStorage.setItem('auth_user', JSON.stringify(authUser));
+
+        return { success: true };
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error ? err.message : 'Login failed';
+        return { success: false, error: message };
+      }
+    },
+    [],
+  );
+
+  // ── Logout ─────────────────────────────────────────────────────────────────
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // Even if endpoint fails, clear local state
+    }
     setUser(null);
-    localStorage.removeItem("auth_user");
+    localStorage.removeItem('auth_user');
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated: !!user, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -88,7 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

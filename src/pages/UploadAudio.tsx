@@ -1,37 +1,33 @@
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Upload, RotateCcw, Loader2, CheckCircle } from "lucide-react";
-import { useState, useCallback, useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Button } from "@/components/ui/button";
-import { ContextBar } from "@/components/upload/ContextBar";
-import { FileDropzone } from "@/components/upload/FileDropzone";
 import { UploadForm, UploadFormData, UploadFormErrors } from "@/components/upload/UploadForm";
-import { Progress } from "@/components/ui/progress";
+import { FileDropzone } from "@/components/upload/FileDropzone";
+import { ContextBar } from "@/components/upload/ContextBar";
+import { Button } from "@/components/ui/button";
+import { Upload, Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-
-const initialFormData: UploadFormData = {
-  trainNumber: "",
-  locoNumber: "",
-  lpName: "",
-  designation: "",
-  alpName: "",
-  section: "",
-  hq: "",
-};
+import { useUploadAudio } from "@/hooks/api/useUpload";
 
 export default function UploadAudio() {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { user, isAuthenticated } = useAuth();
-  
-  const [formData, setFormData] = useState<UploadFormData>(initialFormData);
+  const { toast } = useToast();
+  const uploadMutation = useUploadAudio();
+
   const [files, setFiles] = useState<File[]>([]);
+  const [formData, setFormData] = useState<UploadFormData>({
+    trainNumber: "",
+    locoNumber: "",
+    lpName: "",
+    designation: "",
+    alpName: "",
+    section: "",
+    hq: "",
+  });
   const [errors, setErrors] = useState<UploadFormErrors>({});
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadComplete, setUploadComplete] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -46,46 +42,16 @@ export default function UploadAudio() {
     if (!formData.trainNumber.trim()) {
       newErrors.trainNumber = "Train number is required";
     }
-    if (!formData.locoNumber.trim()) {
-      newErrors.locoNumber = "Loco number is required";
-    }
     if (!formData.lpName) {
-      newErrors.lpName = "LP Name is required";
-    }
-    if (!formData.designation) {
-      newErrors.designation = "Designation is required";
-    }
-    if (!formData.alpName) {
-      newErrors.alpName = "ALP Name is required";
+      newErrors.lpName = "LP name is required";
     }
     if (!formData.section) {
       newErrors.section = "Section is required";
-    }
-    if (!formData.hq) {
-      newErrors.hq = "HQ is required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [formData]);
-
-  const isFormValid = 
-    formData.trainNumber.trim() &&
-    formData.locoNumber.trim() &&
-    formData.lpName &&
-    formData.designation &&
-    formData.alpName &&
-    formData.section &&
-    formData.hq &&
-    files.length > 0;
-
-  const handleReset = useCallback(() => {
-    setFormData(initialFormData);
-    setFiles([]);
-    setErrors({});
-    setUploadProgress(0);
-    setUploadComplete(false);
-  }, []);
 
   const handleUpload = useCallback(async () => {
     if (!validateForm()) {
@@ -99,39 +65,57 @@ export default function UploadAudio() {
 
     if (files.length === 0) {
       toast({
-        title: "No Files Selected",
+        title: "No Files",
         description: "Please select at least one audio file to upload",
         variant: "destructive",
       });
       return;
     }
 
-    setIsUploading(true);
-    setUploadProgress(0);
+    // Upload each file
+    for (const file of files) {
+      try {
+        await uploadMutation.mutateAsync({
+          file,
+          metadata: {
+            division: user?.division || "",
+            train_number: formData.trainNumber || undefined,
+            loco_number: formData.locoNumber || undefined,
+            loco_pilot: formData.lpName || undefined,
+            alp_name: formData.alpName || undefined,
+            section: formData.section || undefined,
+            designation: formData.designation || undefined,
+          },
+        });
 
-    // Simulate upload progress
-    const progressInterval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + Math.random() * 15;
-      });
-    }, 300);
+        toast({
+          title: "Upload Successful",
+          description: `${file.name} uploaded successfully.`,
+        });
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Upload failed";
+        toast({
+          title: "Upload Failed",
+          description: `${file.name}: ${message}`,
+          variant: "destructive",
+        });
+      }
+    }
 
-    // Simulate upload completion
-    setTimeout(() => {
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-      setIsUploading(false);
-      setUploadComplete(true);
-      toast({
-        title: "Upload Successful",
-        description: `${files.length} file(s) uploaded successfully`,
+    // Reset form after successful upload
+    if (!uploadMutation.isError) {
+      setFiles([]);
+      setFormData({
+        trainNumber: "",
+        locoNumber: "",
+        lpName: "",
+        designation: "",
+        alpName: "",
+        section: "",
+        hq: "",
       });
-    }, 3000);
-  }, [files, validateForm, toast]);
+    }
+  }, [files, validateForm, toast, uploadMutation, user]);
 
   if (!isAuthenticated) {
     return null;
@@ -140,81 +124,58 @@ export default function UploadAudio() {
   return (
     <AppShell>
       <PageHeader
-        title="Upload Audio Files"
+        title="Upload Audio"
         description="Upload audio recordings for transcription and analysis"
       />
 
       <div className="container py-8 space-y-6">
-        {/* Context Bar - uses logged in user info */}
-        <ContextBar 
-          username={user?.username || "Unknown"} 
-          division={user?.division || "Unknown"} 
-        />
+        {/* Context Bar */}
+        <ContextBar />
 
-        {/* Upload Form Card */}
-        <div className="card-elevated p-6 space-y-6">
-          {/* Form Fields */}
+        {/* Form */}
+        <div className="card-elevated p-6">
+          <h3 className="font-semibold mb-4">Audio Metadata</h3>
           <UploadForm
             formData={formData}
             onFormChange={setFormData}
             errors={errors}
           />
+        </div>
 
-          {/* File Dropzone */}
-          <FileDropzone files={files} onFilesChange={setFiles} />
+        {/* File Dropzone */}
+        <div className="card-elevated p-6">
+          <h3 className="font-semibold mb-4">Audio Files</h3>
+          <FileDropzone
+            files={files}
+            onFilesChange={setFiles}
+          />
+        </div>
 
-          {/* Upload Progress */}
-          {(isUploading || uploadComplete) && (
-            <div className="space-y-2 animate-fade-in">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {uploadComplete ? "Upload Complete" : "Uploading..."}
-                </span>
-                <span className="font-medium text-foreground">
-                  {Math.round(uploadProgress)}%
-                </span>
-              </div>
-              <Progress value={uploadProgress} className="h-2" />
-              {uploadComplete && (
-                <div className="flex items-center gap-2 text-accent text-sm font-medium">
-                  <CheckCircle className="h-4 w-4" />
-                  Files uploaded successfully
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-border">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              disabled={isUploading}
-              className="w-full sm:w-auto"
-            >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Reset
-            </Button>
-            <Button
-              type="button"
-              onClick={handleUpload}
-              disabled={!isFormValid || isUploading}
-              className="w-full sm:w-auto bg-secondary hover:bg-secondary/90"
-            >
-              {isUploading ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload Files
-                </>
-              )}
-            </Button>
-          </div>
+        {/* Upload Button */}
+        <div className="flex justify-end">
+          <Button
+            size="lg"
+            className="bg-secondary hover:bg-secondary/90 min-w-[200px]"
+            onClick={handleUpload}
+            disabled={uploadMutation.isPending || files.length === 0}
+          >
+            {uploadMutation.isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Uploading...
+              </>
+            ) : uploadMutation.isSuccess ? (
+              <>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Upload Complete
+              </>
+            ) : (
+              <>
+                <Upload className="h-4 w-4 mr-2" />
+                Upload {files.length > 0 ? `${files.length} File(s)` : "Files"}
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </AppShell>

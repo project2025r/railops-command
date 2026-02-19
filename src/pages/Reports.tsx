@@ -1,204 +1,238 @@
- import { useState } from "react";
- import { AppShell } from "@/components/layout/AppShell";
- import { PageHeader } from "@/components/ui/PageHeader";
- import { FilterPanel } from "@/components/ui/FilterPanel";
- import { DataTable, Column } from "@/components/ui/DataTable";
- import { Button } from "@/components/ui/button";
- import { Label } from "@/components/ui/label";
- import { Input } from "@/components/ui/input";
- import {
-   Select,
-   SelectContent,
-   SelectItem,
-   SelectTrigger,
-   SelectValue,
- } from "@/components/ui/select";
- import { Download } from "lucide-react";
- 
- interface ReportRow {
-   lpName: string;
-   division: string;
-   totalFiles: number;
-   relevant: number;
-   irrelevant: number;
-   sections: number;
-   trains: number;
-   lastActivity: string;
- }
- 
- const sampleData: ReportRow[] = [
-   {
-     lpName: "Ram Sumer Yadav",
-     division: "Jodhpur",
-     totalFiles: 115,
-     relevant: 48892,
-     irrelevant: 12552,
-     sections: 14,
-     trains: 28,
-     lastActivity: "1/27/2026",
-   },
-   {
-     lpName: "Virendra Singh Tanwar",
-     division: "Jodhpur",
-     totalFiles: 28,
-     relevant: 13156,
-     irrelevant: 3046,
-     sections: 3,
-     trains: 3,
-     lastActivity: "1/31/2026",
-   },
-   {
-     lpName: "Naval Kishor Meena",
-     division: "Jodhpur",
-     totalFiles: 26,
-     relevant: 11220,
-     irrelevant: 2828,
-     sections: 5,
-     trains: 4,
-     lastActivity: "12/19/2025",
-   },
-   {
-     lpName: "Hukam Singh Rathore",
-     division: "Jodhpur",
-     totalFiles: 19,
-     relevant: 7367,
-     irrelevant: 1471,
-     sections: 5,
-     trains: 8,
-     lastActivity: "1/26/2026",
-   },
- ];
- 
- const columns: Column<ReportRow>[] = [
-   { key: "lpName", header: "LP Name", className: "font-medium" },
-   { key: "division", header: "Division" },
-   { key: "totalFiles", header: "Total Files", className: "text-right" },
-   {
-     key: "relevant",
-     header: "Relevant",
-     className: "text-right",
-     render: (value) => (
-       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">
-         {value.toLocaleString()}
-       </span>
-     ),
-   },
-   {
-     key: "irrelevant",
-     header: "Irrelevant",
-     className: "text-right",
-     render: (value) => (
-       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/15 text-destructive">
-         {value.toLocaleString()}
-       </span>
-     ),
-   },
-   { key: "sections", header: "Sections", className: "text-center" },
-   { key: "trains", header: "Trains", className: "text-center" },
-   { key: "lastActivity", header: "Last Activity" },
-   {
-     key: "actions",
-     header: "Actions",
-     className: "text-right",
-     render: () => (
-      <Button size="sm" className="bg-secondary hover:bg-secondary/90">
-         <Download className="h-4 w-4 mr-1" />
-         Download
-       </Button>
-     ),
-   },
- ];
- 
- export default function Reports() {
-   const [filters, setFilters] = useState({
-     division: "",
-     lpName: "",
-     fromDate: "01-11-2024",
-     toDate: "04-02-2026",
-   });
- 
-   const handleApply = () => {};
-   const handleClear = () =>
-     setFilters({ division: "", lpName: "", fromDate: "", toDate: "" });
- 
-   return (
-     <AppShell>
-       <PageHeader
-         title="Reports & Analytics"
-         description="LP-wise performance reports with advanced filtering"
-       />
- 
-       <div className="container py-8 space-y-6">
-         {/* Filters */}
-         <FilterPanel onApply={handleApply} onClear={handleClear}>
-           <div className="space-y-2">
-             <Label>Division</Label>
-             <Select
-               value={filters.division}
-               onValueChange={(v) => setFilters({ ...filters, division: v })}
-             >
-               <SelectTrigger className="input-premium">
-                 <SelectValue placeholder="All Divisions" />
-               </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Divisions</SelectItem>
-                 <SelectItem value="jodhpur">Jodhpur</SelectItem>
-                 <SelectItem value="jaipur">Jaipur</SelectItem>
-                 <SelectItem value="bikaner">Bikaner</SelectItem>
-                 <SelectItem value="ajmer">Ajmer</SelectItem>
-               </SelectContent>
-             </Select>
-           </div>
- 
-           <div className="space-y-2">
-             <Label>LP Name</Label>
-             <Select
-               value={filters.lpName}
-               onValueChange={(v) => setFilters({ ...filters, lpName: v })}
-             >
-               <SelectTrigger className="input-premium">
-                 <SelectValue placeholder="All LPs" />
-               </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All LPs</SelectItem>
-                 <SelectItem value="ram">Ram Sumer Yadav</SelectItem>
-                 <SelectItem value="virendra">Virendra Singh Tanwar</SelectItem>
-               </SelectContent>
-             </Select>
-           </div>
- 
-           <div className="space-y-2">
-             <Label>From Date</Label>
-             <Input
-               type="date"
-               value={filters.fromDate}
-               onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
-               className="input-premium"
-             />
-           </div>
- 
-           <div className="space-y-2">
-             <Label>To Date</Label>
-             <Input
-               type="date"
-               value={filters.toDate}
-               onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
-               className="input-premium"
-             />
-           </div>
-         </FilterPanel>
- 
-         {/* Results Table */}
-         <div className="space-y-4">
-           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-secondary">LP Reports Summary</h3>
-             <span className="text-sm text-muted-foreground">
-               Showing {sampleData.length} of {sampleData.length} results
-             </span>
-           </div>
-           <DataTable columns={columns} data={sampleData} />
-         </div>
-       </div>
-     </AppShell>
-   );
- }
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppShell } from "@/components/layout/AppShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { DataTable, Column } from "@/components/ui/DataTable";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Filter, Download, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useDropdownData } from "@/hooks/api/useUpload";
+import { useTranscriptKpi } from "@/hooks/api/useDashboard";
+
+interface ReportRow {
+  lpName: string;
+  keywordsFound: number;
+}
+
+const columns: Column<ReportRow>[] = [
+  { key: "lpName", header: "LP Name" },
+  { key: "keywordsFound", header: "Keywords Found", className: "text-right" },
+];
+
+export default function Reports() {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const isSuperAdmin = user?.role === "Super Admin";
+
+  const [filters, setFilters] = useState({
+    division: "",
+    lp: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [filtersApplied, setFiltersApplied] = useState(false);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Fetch dropdown data for filters
+  const { data: dropdownData, isLoading: dropdownLoading } = useDropdownData(
+    isSuperAdmin ? undefined : user?.division,
+  );
+
+  // Fetch KPI data for reports
+  const apiParams = {
+    division: filters.division && filters.division !== "All" ? filters.division : undefined,
+    loco_pilot: filters.lp && filters.lp !== "All" ? filters.lp : undefined,
+    start_date: filters.startDate || undefined,
+    end_date: filters.endDate || undefined,
+  };
+
+  const { data: kpiData, isLoading: kpiLoading } = useTranscriptKpi(apiParams, filtersApplied);
+
+  // Transform KPI breakdown data into table rows
+  const reportData: ReportRow[] = kpiData
+    ? Object.entries(kpiData.breakdown_by_loco_pilot).map(([lpName, keywordsFound]) => ({
+      lpName,
+      keywordsFound,
+    }))
+    : [];
+
+  const handleApplyFilters = () => {
+    setFiltersApplied(true);
+  };
+
+  const handleDownload = () => {
+    if (reportData.length === 0) return;
+    const csv = [
+      "LP Name,Keywords Found",
+      ...reportData.map((r) => `${r.lpName},${r.keywordsFound}`),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `report_${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const divisions = ["All", ...(dropdownData?.divisions ?? [])];
+  const lps = ["All", ...(dropdownData?.loco_pilots ?? [])];
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <AppShell>
+      <PageHeader
+        title="Reports"
+        description="LP-wise performance analytics and keyword analysis"
+      />
+
+      <div className="container py-8 space-y-6">
+        {/* Filter Panel */}
+        <div className="card-elevated p-5">
+          <h3 className="font-semibold mb-4 flex items-center gap-2">
+            <Filter className="h-4 w-4 text-secondary" />
+            Filters
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {isSuperAdmin && (
+              <div className="space-y-2">
+                <Label>Division</Label>
+                <Select
+                  value={filters.division}
+                  onValueChange={(v) => setFilters({ ...filters, division: v })}
+                  disabled={dropdownLoading}
+                >
+                  <SelectTrigger className="input-premium">
+                    <SelectValue placeholder={dropdownLoading ? "Loading..." : "All"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {divisions.map((d) => (
+                      <SelectItem key={d} value={d}>{d}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label>LP Name</Label>
+              <Select
+                value={filters.lp}
+                onValueChange={(v) => setFilters({ ...filters, lp: v })}
+                disabled={dropdownLoading}
+              >
+                <SelectTrigger className="input-premium">
+                  <SelectValue placeholder={dropdownLoading ? "Loading..." : "All"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {lps.map((lp) => (
+                    <SelectItem key={lp} value={lp}>{lp}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Start Date</Label>
+              <input
+                type="date"
+                value={filters.startDate}
+                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                className="input-premium w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>End Date</Label>
+              <input
+                type="date"
+                value={filters.endDate}
+                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                className="input-premium w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 flex gap-3">
+            <Button
+              className="bg-secondary hover:bg-secondary/90"
+              onClick={handleApplyFilters}
+              disabled={kpiLoading}
+            >
+              {kpiLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Apply Filters"
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              className="border-secondary/30"
+              onClick={handleDownload}
+              disabled={reportData.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download CSV
+            </Button>
+          </div>
+        </div>
+
+        {/* Summary Cards */}
+        {kpiData && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="card-elevated p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{kpiData.total_files}</p>
+              <p className="text-sm text-muted-foreground">Total Files</p>
+            </div>
+            <div className="card-elevated p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{kpiData.total_keywords_found}</p>
+              <p className="text-sm text-muted-foreground">Keywords Found</p>
+            </div>
+            <div className="card-elevated p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{reportData.length}</p>
+              <p className="text-sm text-muted-foreground">Loco Pilots</p>
+            </div>
+          </div>
+        )}
+
+        {/* Data Table */}
+        {kpiLoading ? (
+          <div className="card-elevated p-12 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+            <span className="ml-3 text-muted-foreground">Loading report data...</span>
+          </div>
+        ) : filtersApplied && reportData.length > 0 ? (
+          <DataTable columns={columns} data={reportData} />
+        ) : filtersApplied ? (
+          <div className="card-elevated p-12 text-center text-muted-foreground">
+            No report data found. Try adjusting your filters.
+          </div>
+        ) : (
+          <div className="card-elevated p-12 text-center text-muted-foreground">
+            Apply filters to generate report data.
+          </div>
+        )}
+      </div>
+    </AppShell>
+  );
+}

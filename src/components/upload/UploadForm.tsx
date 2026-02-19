@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,6 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { useDropdownData } from "@/hooks/api/useUpload";
 
 export interface UploadFormData {
   trainNumber: string;
@@ -36,21 +37,14 @@ interface UploadFormProps {
   errors: UploadFormErrors;
 }
 
-// Mock data - in production this would come from API
-const mockLPNames = ["LP Singh", "LP Kumar", "LP Sharma", "LP Verma", "LP Gupta"];
-const mockALPNames = ["ALP Patel", "ALP Mehta", "ALP Joshi", "ALP Reddy", "ALP Nair"];
-const mockDesignations = ["Goods Driver", "Mail Driver", "Express Driver", "Shunter"];
-const mockSections = ["JU-MJ", "JU-BMR", "JU-PKN", "AII-JP", "BKN-NK"];
-const mockHQs = ["Jodhpur", "Bikaner", "Jaipur", "Ajmer"];
-
 export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const { data: dropdownData, isLoading } = useDropdownData(user?.division);
 
-  // Simulate loading delay for dropdowns
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+  const lpNames = dropdownData?.loco_pilots ?? [];
+  const designations = dropdownData?.designations ?? [];
+  const sections = dropdownData?.sections ?? [];
+  const divisions = dropdownData?.divisions ?? [];
 
   const handleInputChange = (field: keyof UploadFormData, value: string) => {
     onFormChange({ ...formData, [field]: value });
@@ -109,7 +103,7 @@ export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) 
             <SelectValue placeholder={isLoading ? "Loading..." : "Select LP Name"} />
           </SelectTrigger>
           <SelectContent>
-            {mockLPNames.map((name) => (
+            {lpNames.map((name) => (
               <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
@@ -138,7 +132,7 @@ export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) 
             <SelectValue placeholder={isLoading ? "Loading..." : "Select Designation"} />
           </SelectTrigger>
           <SelectContent>
-            {mockDesignations.map((designation) => (
+            {designations.map((designation) => (
               <SelectItem key={designation} value={designation}>
                 {designation}
               </SelectItem>
@@ -167,7 +161,7 @@ export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) 
             <SelectValue placeholder={isLoading ? "Loading..." : "Select ALP Name"} />
           </SelectTrigger>
           <SelectContent>
-            {mockALPNames.map((name) => (
+            {lpNames.map((name) => (
               <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
@@ -196,7 +190,7 @@ export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) 
             <SelectValue placeholder={isLoading ? "Loading..." : "Select Section"} />
           </SelectTrigger>
           <SelectContent>
-            {mockSections.map((section) => (
+            {sections.map((section) => (
               <SelectItem key={section} value={section}>
                 {section}
               </SelectItem>
@@ -225,9 +219,9 @@ export function UploadForm({ formData, onFormChange, errors }: UploadFormProps) 
             <SelectValue placeholder={isLoading ? "Loading..." : "Select HQ"} />
           </SelectTrigger>
           <SelectContent>
-            {mockHQs.map((hq) => (
-              <SelectItem key={hq} value={hq}>
-                {hq}
+            {divisions.map((div) => (
+              <SelectItem key={div} value={div}>
+                {div}
               </SelectItem>
             ))}
           </SelectContent>

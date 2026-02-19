@@ -4,21 +4,17 @@ import { User, Building2, Lock, Eye, EyeOff, Lightbulb, AlertCircle } from "luci
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDivisions } from "@/hooks/api/useDivisions";
 import railwayBg from "@/assets/railway-bg.jpg";
-
-const divisions = ["Jodhpur", "Jaipur", "Bikaner", "Ajmer"];
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { data: divisionsData, isLoading: divisionsLoading } = useDivisions();
+
+  const divisions = divisionsData?.divisions ?? [];
+
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,10 +42,7 @@ export default function Login() {
       return;
     }
 
-    // Simulate network delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const result = login(formData.username.trim(), formData.password, formData.division);
+    const result = await login(formData.username.trim(), formData.password, formData.division);
 
     if (result.success) {
       navigate("/home");
@@ -121,24 +114,24 @@ export default function Login() {
                 <Building2 className="h-4 w-4 text-secondary" />
                 Division
               </Label>
-              <Select
+              <select
+                id="division"
                 value={formData.division}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, division: value })
+                onChange={(e) =>
+                  setFormData({ ...formData, division: e.target.value })
                 }
-                disabled={isLoading}
+                disabled={isLoading || divisionsLoading}
+                className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <SelectTrigger className="input-premium">
-                  <SelectValue placeholder="Select division" />
-                </SelectTrigger>
-                <SelectContent>
-                  {divisions.map((div) => (
-                    <SelectItem key={div} value={div}>
-                      {div}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="">
+                  {divisionsLoading ? "Loading divisions..." : "Select your division"}
+                </option>
+                {divisions.map((div) => (
+                  <option key={div.id} value={div.name}>
+                    {div.name}
+                  </option>
+                ))}
+              </select>
               <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Lightbulb className="h-3 w-3 text-primary" />
                 Super Admin users can leave division empty to access all divisions
@@ -179,29 +172,14 @@ export default function Login() {
             </div>
 
             {/* Submit */}
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full h-11 text-base font-medium bg-secondary hover:bg-secondary/90"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
-          {/* Demo Credentials Hint */}
-          <div className="mt-6 p-3 bg-muted/50 rounded-lg border border-border">
-            <p className="text-xs text-muted-foreground text-center mb-2">Demo Credentials:</p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="text-center">
-                <p className="font-medium text-foreground">Super Admin</p>
-                <p className="text-muted-foreground">admin / admin</p>
-              </div>
-              <div className="text-center">
-                <p className="font-medium text-foreground">Division User</p>
-                <p className="text-muted-foreground">Ajuser1 / 123</p>
-              </div>
-            </div>
-          </div>
 
           <p className="text-center text-xs text-muted-foreground mt-4">
             Secure access to railway operations dashboard
